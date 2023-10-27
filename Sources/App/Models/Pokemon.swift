@@ -21,8 +21,8 @@ final class Pokemon: Model {
     @Field(key: "name")
     var name: String
     
-    @Field(key: "types")
-    var types: String
+    @Children(for: \.$pokemon)
+    var types: [Types]
     
     @Field(key: "hp")
     var hp: Int
@@ -39,7 +39,7 @@ final class Pokemon: Model {
     
     init() { }
     
-    init(id: UUID? = nil, externalID: Int, name: String, types: String, hp: Int, attack: Int, defense: Int, speed: Int) {
+    init(id: UUID? = nil, externalID: Int, name: String, types: [Types], hp: Int, attack: Int, defense: Int, speed: Int) {
         self.id = id
         self.externalID = externalID
         self.name = name

@@ -17,4 +17,9 @@ struct PokemonController: RouteCollection {
     func index(req: Request) async throws -> String {
         return "It's Pokedex"
     }
+    
+    func sync(req: Request) async throws -> String {
+        
+        return "Pokedex is Synced!"
+    }
 }
