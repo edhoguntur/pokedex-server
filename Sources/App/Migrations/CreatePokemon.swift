@@ -13,11 +13,11 @@ struct CreatePokemon: AsyncMigration {
             .id()
             .field("external_id", .int, .required)
             .field("name", .string, .required)
-            .field("types", .string, .required)
-            .field("hp", .int, .required)
-            .field("attack", .int, .required)
-            .field("defense", .int, .required)
-            .field("speed", .int, .required)
+            .field("hp", .int)
+            .field("attack", .int)
+            .field("defense", .int)
+            .field("speed", .int)
+            .field("image_url", .string)
             .create()
     }
     func revert(on database: Database) async throws {

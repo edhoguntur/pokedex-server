@@ -11,8 +11,8 @@ struct CreateTypes: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("types")
             .id()
-            .field("slot", .int, .required)
-            .field("type", .string, .required)
+            .field("slot", .int)
+            .field("type", .string)
             .field("pokemon_id", .uuid, .references("pokemons", "id"))
             .create()
     }

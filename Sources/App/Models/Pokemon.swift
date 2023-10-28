@@ -36,18 +36,21 @@ final class Pokemon: Model {
     @Field(key: "speed")
     var speed: Int
     
+    @Field(key: "image_url")
+    var imageUrl: String
+    
     
     init() { }
     
-    init(id: UUID? = nil, externalID: Int, name: String, types: [Types], hp: Int, attack: Int, defense: Int, speed: Int) {
+    init(id: UUID? = nil, externalID: Int, name: String, hp: Int, attack: Int, defense: Int, speed: Int, imageUrl: String) {
         self.id = id
         self.externalID = externalID
         self.name = name
-        self.types = types
         self.hp = hp
         self.attack = attack
         self.defense = defense
         self.speed = speed
+        self.imageUrl = imageUrl
     }
 
 }
