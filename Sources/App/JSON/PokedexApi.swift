@@ -100,9 +100,3 @@ struct Type: Content {
 struct TypeDetail: Content {
     let name: String
 }
-
-struct Status {
-    let Attack: Int
-    let Defense: Int
-    let Speed: Int
-}

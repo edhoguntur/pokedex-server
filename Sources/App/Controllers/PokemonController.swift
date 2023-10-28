@@ -21,7 +21,13 @@ struct PokemonController: RouteCollection {
     }
     
     func sync(req: Request) async throws -> String {
-        let headRes = try await req.client.get("https://pokeapi.co/api/v2/pokemon?limit=1")
+        // Before sync lets delete all database
+        try await Types.query(on: req.db)
+            .delete()
+        try await Pokemon.query(on: req.db)
+            .delete()
+        
+        let headRes = try await req.client.get("https://pokeapi.co/api/v2/pokemon?limit=750")
         let decodedHeadRes = try headRes.content.decode(PokedexApiHeaderSource.self)
         
         
