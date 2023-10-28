@@ -8,7 +8,7 @@
 import Fluent
 import Vapor
 
-final class Pokemon: Model {
+final class Pokemon: Model, Content {
     
     static let schema = "pokemons"
     

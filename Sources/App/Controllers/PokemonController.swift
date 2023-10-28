@@ -13,7 +13,14 @@ struct PokemonController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let pokemons = routes.grouped("pokemons")
         pokemons.get(use: index)
+        pokemons.get("all", use: showAll)
         pokemons.get("sync", use: sync)
+        
+        pokemons.group(":id") { pokemon in
+            pokemon.get(use: showById)
+            pokemon.put(use: update)
+            pokemon.delete(use: delete)
+        }
     }
     
     func index(req: Request) async throws -> String {
@@ -69,5 +76,38 @@ struct PokemonController: RouteCollection {
         
         return "Pokedex is synced successfully!"
         
+    }
+    
+    func showAll(req: Request) async throws -> [Pokemon] {
+        try await Pokemon.query(on: req.db).all()
+    }
+    
+    func showById(req: Request) async throws -> Pokemon {
+        guard let pokemon = try await Pokemon.find(req.parameters.get("id"), on: req.db) else {
+            throw Abort(.notFound)
+        }
+        
+        return pokemon
+    }
+    
+    func update(req: Request) async throws -> Pokemon {
+        guard let pokemon = try await Pokemon.find(req.parameters.get("id"), on: req.db) else {
+            throw Abort(.notFound)
+        }
+        let updatedPokemon = try req.content.decode(Pokemon.self)
+        pokemon.hp = updatedPokemon.hp
+        pokemon.attack = updatedPokemon.attack
+        pokemon.defense = updatedPokemon.defense
+        pokemon.speed = updatedPokemon.speed
+        try await pokemon.save(on: req.db)
+        return pokemon
+    }
+    
+    func delete(req: Request) async throws -> HTTPStatus {
+        guard let pokemon = try await Pokemon.find(req.parameters.get("id"), on: req.db) else {
+            throw Abort(.notFound)
+        }
+        try await pokemon.delete(on: req.db)
+        return .ok
     }
 }
