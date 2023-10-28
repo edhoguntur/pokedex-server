@@ -24,6 +24,9 @@ final class Pokemon: Model {
     @Children(for: \.$pokemon)
     var types: [Types]
     
+    @OptionalChild(for: \.$pokemon)
+    var species: Species?
+    
     @Field(key: "hp")
     var hp: Int
     

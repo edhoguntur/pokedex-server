@@ -1,27 +1,19 @@
 //
-//  PokedexApi.swift
+//  PokedexApiDetail.swift
 //
 //
-//  Created by Edho Guntur Adhitama on 27/10/23.
+//  Created by Edho Guntur Adhitama on 28/10/23.
 //
 
 import Vapor
 import Foundation
-
-struct PokedexApiHeaderSource: Content {
-    let results: [Result]
-}
-
-struct Result: Content {
-    let name: String
-    let url: String
-}
 
 struct PokedexApiDetailSource: Content {
     let height: Int
     let id: Int
     let name: String
     let sprites: Sprites
+    let species: SpeciesDetail
     let stats: [Stat]
     let types: [Type]
     
@@ -31,6 +23,7 @@ struct PokedexApiDetailSource: Content {
         id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         sprites = try container.decode(Sprites.self, forKey: .sprites)
+        species = try container.decode(SpeciesDetail.self, forKey: .species)
         stats = try container.decode([Stat].self, forKey: .stats)
         types = try container.decode([Type].self, forKey: .types)
     }
@@ -99,4 +92,14 @@ struct Type: Content {
 
 struct TypeDetail: Content {
     let name: String
+}
+
+struct SpeciesDetail: Content {
+    let name: String
+    let url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name = "name"
+        case url = "url"
+    }
 }
