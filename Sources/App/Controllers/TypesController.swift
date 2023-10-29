@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Fluent
 
 
 struct TypesController: RouteCollection {
@@ -22,11 +23,21 @@ struct TypesController: RouteCollection {
         }
         
         func showByPokemonId(req: Request) async throws -> [Types] {
-            guard let types = try await Types.find(req.parameters.get("pokemon_id"), on: req.db) else {
+            
+            guard let pokemonIdString = req.parameters.get("pokemon_id"),
+                  let pokemonId = UUID(pokemonIdString) else {
+                throw Abort(.badRequest, reason: "Invalid Pokemon ID")
+            }
+            
+            let types = try await Types.query(on: req.db)
+                .filter(\.$pokemon.$id == pokemonId)
+                .all()
+            
+            if types.isEmpty {
                 throw Abort(.notFound)
             }
-            return [types]
             
+            return types
         }
         
     }

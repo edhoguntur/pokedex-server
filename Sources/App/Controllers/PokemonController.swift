@@ -14,7 +14,7 @@ struct PokemonController: RouteCollection {
         let pokemons = routes.grouped("pokemons")
         pokemons.get(use: index)
         pokemons.get("all", use: showAll)
-        pokemons.get("sync", use: sync)
+        pokemons.get("sync",":limit", use: sync)
         
         pokemons.group(":id") { pokemon in
             pokemon.get(use: showById)
@@ -34,7 +34,10 @@ struct PokemonController: RouteCollection {
         try await Pokemon.query(on: req.db)
             .delete()
         
-        let headRes = try await req.client.get("https://pokeapi.co/api/v2/pokemon?limit=750")
+        // get limit value
+        let limit = req.parameters.get("limit")
+        
+        let headRes = try await req.client.get("https://pokeapi.co/api/v2/pokemon?limit=\(String(describing: limit))")
         let decodedHeadRes = try headRes.content.decode(PokedexApiHeaderSource.self)
         
         
