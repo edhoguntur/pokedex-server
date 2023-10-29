@@ -8,7 +8,7 @@
 import Fluent
 import Vapor
 
-final class Species: Model {
+final class Species: Model, Content {
     static let schema = "species"
     
     @ID(key: .id)
